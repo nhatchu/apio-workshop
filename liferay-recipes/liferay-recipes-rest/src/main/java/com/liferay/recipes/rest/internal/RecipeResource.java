@@ -16,6 +16,7 @@ package com.liferay.recipes.rest.internal;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.recipes.model.Recipe;
+import com.liferay.recipes.rest.model.RecipeDTO;
 import com.liferay.recipes.service.RecipeService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,8 +42,8 @@ public class RecipeResource {
 
 	@GET
 	@Path("{id}")
-	public String retrieve(@PathParam("id") long id) throws PortalException {
-		return _recipeService.getRecipe(id).getName();
+	public RecipeDTO retrieveRecipe(@PathParam("id") long id) throws PortalException {
+		return new RecipeDTO(_recipeService.getRecipe(id));
 	}
 
 	@Reference
