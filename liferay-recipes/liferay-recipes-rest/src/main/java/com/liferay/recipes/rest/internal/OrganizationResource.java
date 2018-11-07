@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.OrganizationService;
 import com.liferay.recipes.model.Recipe;
+import com.liferay.recipes.rest.model.OrganizationDTO;
+import com.liferay.recipes.rest.model.RecipeDTO;
 import com.liferay.recipes.service.RecipeService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -47,34 +49,33 @@ public class OrganizationResource {
 
 	@GET
 	@Path("{id}")
-	public String retrieve(@PathParam("id") long id) throws PortalException {
+	public OrganizationDTO retrieve(@PathParam("id") long id) throws PortalException {
 		Organization organization = _organizationService.getOrganization(id);
 
-		return organization.getName();
+		return new OrganizationDTO(organization);
 	}
 
 	@GET
-	public String retrieve(@Context User user) throws PortalException {
+	public List<OrganizationDTO> retrieve(@Context User user) throws PortalException {
 		List<Organization> organizations =
 			_organizationService.getUserOrganizations(user.getUserId());
 
 		return organizations.stream()
-			.map(organization -> organization.getGroupId() + " : " + organization.getName())
-			.collect(Collectors.joining(", "));
+			.map(OrganizationDTO::new)
+			.collect(Collectors.toList());
 	}
 
 	@GET
 	@Path("{id}/recipes")
-	public String retrieveRecipes(@PathParam("id") long groupId) {
+	public List<RecipeDTO> retrieveRecipes(@PathParam("id") long groupId) {
 		return _recipeService.getRecipesByGroupId(groupId, -1, -1)
 			.stream()
-			.map(Recipe::getName)
-			.collect(Collectors.joining("\n"));
+			.map(RecipeDTO::new)
+			.collect(Collectors.toList());
 	}
 
 	@Reference
 	private RecipeService _recipeService;
-
 	@Reference
 	private OrganizationService _organizationService;
 

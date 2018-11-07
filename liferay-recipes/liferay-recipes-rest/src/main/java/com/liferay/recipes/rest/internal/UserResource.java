@@ -17,6 +17,7 @@ package com.liferay.recipes.rest.internal;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserService;
+import com.liferay.recipes.rest.model.UserDTO;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -40,11 +41,10 @@ public class UserResource {
 
 	@GET
 	@Path("{id}")
-	public String retrieve(@PathParam("id") long id) throws PortalException {
-		User user = _userService.getUserById(id);
-
-		return user.getFullName();
+	public UserDTO retrieve(@PathParam("id") long id) throws PortalException {
+		return new UserDTO(_userService.getUserById(id));
 	}
+
 
 	@Reference
 	private UserService _userService;
