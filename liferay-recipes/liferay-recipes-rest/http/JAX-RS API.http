@@ -1,0 +1,25 @@
+
+#### JAX-RS API
+### Step 1: Create Application
+GET http://localhost:8080/o/rest/hello
+Authorization: Basic BASE64_HERE
+
+### Step 2: Organizations Resource
+GET http://localhost:8080/o/rest/organization
+Authorization: Basic BASE64_HERE
+
+> {% client.global.set("restaurantId", response.body.split(":")[0].trim()); %}
+
+### Step 3: Recipes Resource
+
+GET http://localhost:8080/o/rest/organization/{{restaurantId}}/recipes
+Authorization: Basic BASE64_HERE
+
+###
+
+### Step 4: Person Resource
+
+GET http://localhost:8080/o/rest/user/35997
+Authorization: Basic BASE64_HERE
+
+###

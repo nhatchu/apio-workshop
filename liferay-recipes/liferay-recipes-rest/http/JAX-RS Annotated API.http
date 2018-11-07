@@ -1,0 +1,23 @@
+### Step 1: Organizations returns OrganizationDTO
+GET http://localhost:8080/o/rest/organization
+Authorization: Basic BASE64_HERE
+
+> {%
+  client.global.set("restaurantId", response.body[0].id);
+  client.global.set("chefId", response.body[0].chefId);
+%}
+
+
+### Step 2: Organizations returns OrganizationDTO
+
+GET http://localhost:8080/o/rest/organization/{{restaurantId}}/recipes
+Authorization: Basic BASE64_HERE
+
+###
+
+### Step 3: Person returns PersonDTO
+
+GET http://localhost:8080/o/rest/user/{{chefId}}
+Authorization: Basic BASE64_HERE
+
+###
