@@ -14,11 +14,42 @@
 
 package com.liferay.recipes.rest.internal;
 
+
+import org.osgi.service.component.annotations.Component;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
+import java.util.Collections;
+import java.util.Set;
+
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 /**
  * @author Alejandro Hernández
  * @author Victor Galán
  */
+@Component(
+	property = {
+		"osgi.jaxrs.application.base=/rest",
+		"osgi.jaxrs.name=recipes-application",
+		"auth.verifier.auth.verifier.BasicAuthHeaderAuthVerifier.urls.includes=*"
+	},
+	service = Application.class
+)
 public class RecipesApplication extends Application {
+
+	@Override
+	public Set<Object> getSingletons() {
+		return Collections.singleton(this);
+	}
+
+	@GET
+	@Produces(TEXT_PLAIN)
+	@Path("hello")
+	public String helloWorld() {
+		return "Hello World";
+	}
+
 }

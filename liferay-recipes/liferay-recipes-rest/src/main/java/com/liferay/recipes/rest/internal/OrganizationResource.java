@@ -23,32 +23,60 @@ import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.service.OrganizationService;
 import com.liferay.recipes.model.Recipe;
 import com.liferay.recipes.service.RecipeService;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Alejandro Hernández
  * @author Victor Galán
  */
+@Component(
+	immediate = true,
+	property = {
+		"osgi.jaxrs.application.select=(osgi.jaxrs.name=recipes-application)",
+		"osgi.jaxrs.resource=true"
+	},
+	service = Object.class
+)
+@Path("organization")
 public class OrganizationResource {
 
-	public Organization retrieve(long id) throws PortalException {
-		return  _organizationService.getOrganization(id);
+	@GET
+	@Path("{id}")
+	public String retrieve(@PathParam("id") long id) throws PortalException {
+		Organization organization = _organizationService.getOrganization(id);
+
+		return organization.getName();
 	}
 
 	@GET
-	public List<Organization> retrieve(User user) throws PortalException {
-		return _organizationService.getUserOrganizations(user.getUserId());
+	public String retrieve(@Context User user) throws PortalException {
+		List<Organization> organizations =
+			_organizationService.getUserOrganizations(user.getUserId());
+
+		return organizations.stream()
+			.map(organization -> organization.getGroupId() + " : " + organization.getName())
+			.collect(Collectors.joining(", "));
 	}
 
-	public List<Recipe> retrieveRecipes(long groupId, User user)
+	@GET
+	@Path("{id}/recipes")
+	public String retrieveRecipes(long groupId, @Context User user)
 		throws PortalException {
 
 		Group organizationGroup = _groupService.getOrganizationGroup(user.getCompanyId(), groupId);
 
-		return _recipeService.getRecipesByGroupId(organizationGroup.getGroupId(), -1, -1);
+		return _recipeService.getRecipesByGroupId(organizationGroup.getGroupId(), -1, -1)
+			.stream()
+			.map(Recipe::getName)
+			.collect(Collectors.joining("\n"));
 	}
 
 	@Reference
