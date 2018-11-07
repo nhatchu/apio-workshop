@@ -17,16 +17,32 @@ package com.liferay.recipes.rest.internal;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.recipes.model.Recipe;
 import com.liferay.recipes.service.RecipeService;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 /**
  * @author Alejandro Hernández
  * @author Victor Galán
  */
+@Component(
+	immediate = true,
+	property = {
+		"osgi.jaxrs.application.select=(osgi.jaxrs.name=recipes-application)",
+		"osgi.jaxrs.resource=true"
+	},
+	service = Object.class
+)
+@Path("recipe")
 public class RecipeResource {
 
-	public Recipe retrieveRecipe(long id) throws PortalException {
-		return _recipeService.getRecipe(id);
+	@GET
+	@Path("{id}")
+	public String retrieve(@PathParam("id") long id) throws PortalException {
+		return _recipeService.getRecipe(id).getName();
 	}
 
 	@Reference
