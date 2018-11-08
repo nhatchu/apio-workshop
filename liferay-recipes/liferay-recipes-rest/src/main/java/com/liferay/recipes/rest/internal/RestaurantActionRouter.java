@@ -14,21 +14,19 @@
 
 package com.liferay.recipes.rest.internal;
 
+import com.liferay.apio.architect.annotation.Actions.EntryPoint;
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
+import com.liferay.apio.architect.annotation.Id;
+import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.OrganizationService;
-import com.liferay.recipes.model.Recipe;
 import com.liferay.recipes.rest.model.OrganizationDTO;
-import com.liferay.recipes.rest.model.RecipeDTO;
-import com.liferay.recipes.service.RecipeService;
+import com.liferay.recipes.rest.type.RestaurantType;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,27 +34,19 @@ import java.util.stream.Collectors;
  * @author Alejandro Hernández
  * @author Victor Galán
  */
-@Component(
-	immediate = true,
-	property = {
-		"osgi.jaxrs.application.select=(osgi.jaxrs.name=recipes-application)",
-		"osgi.jaxrs.resource=true"
-	},
-	service = Object.class
-)
-@Path("organization")
-public class OrganizationResource {
+@Component
+public class RestaurantActionRouter implements ActionRouter<RestaurantType> {
 
-	@GET
-	@Path("{id}")
-	public OrganizationDTO retrieve(@PathParam("id") long id) throws PortalException {
+	@Retrieve
+	public RestaurantType retrieve(@Id long id) throws PortalException {
 		Organization organization = _organizationService.getOrganization(id);
 
 		return new OrganizationDTO(organization);
 	}
 
-	@GET
-	public List<OrganizationDTO> retrieve(@Context User user) throws PortalException {
+	@Retrieve
+	@EntryPoint
+	public List<RestaurantType> retrieve(User user) throws PortalException {
 		List<Organization> organizations =
 			_organizationService.getUserOrganizations(user.getUserId());
 
@@ -65,17 +55,6 @@ public class OrganizationResource {
 			.collect(Collectors.toList());
 	}
 
-	@GET
-	@Path("{id}/recipes")
-	public List<RecipeDTO> retrieveRecipes(@PathParam("id") long groupId) {
-		return _recipeService.getRecipesByGroupId(groupId, -1, -1)
-			.stream()
-			.map(RecipeDTO::new)
-			.collect(Collectors.toList());
-	}
-
-	@Reference
-	private RecipeService _recipeService;
 	@Reference
 	private OrganizationService _organizationService;
 

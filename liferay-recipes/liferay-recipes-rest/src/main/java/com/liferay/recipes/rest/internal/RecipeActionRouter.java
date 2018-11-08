@@ -14,35 +14,40 @@
 
 package com.liferay.recipes.rest.internal;
 
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
+import com.liferay.apio.architect.annotation.Id;
+import com.liferay.apio.architect.annotation.ParentId;
+import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.recipes.model.Recipe;
 import com.liferay.recipes.rest.model.RecipeDTO;
+import com.liferay.recipes.rest.type.RecipeType;
+import com.liferay.recipes.rest.type.RestaurantType;
 import com.liferay.recipes.service.RecipeService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Alejandro Hernández
  * @author Victor Galán
  */
-@Component(
-	immediate = true,
-	property = {
-		"osgi.jaxrs.application.select=(osgi.jaxrs.name=recipes-application)",
-		"osgi.jaxrs.resource=true"
-	},
-	service = Object.class
-)
-@Path("recipe")
-public class RecipeResource {
+@Component
+public class RecipeActionRouter implements ActionRouter<RecipeType> {
 
-	@GET
-	@Path("{id}")
-	public RecipeDTO retrieveRecipe(@PathParam("id") long id) throws PortalException {
+	@Retrieve
+	public List<RecipeType> retrieveRecipes(
+		@ParentId(RestaurantType.class) long groupId) {
+
+		return _recipeService.getRecipesByGroupId(groupId, -1, -1)
+			.stream()
+			.map(RecipeDTO::new)
+			.collect(Collectors.toList());
+	}
+
+	@Retrieve
+	public RecipeType retrieveRecipe(@Id long id) throws PortalException {
 		return new RecipeDTO(_recipeService.getRecipe(id));
 	}
 
