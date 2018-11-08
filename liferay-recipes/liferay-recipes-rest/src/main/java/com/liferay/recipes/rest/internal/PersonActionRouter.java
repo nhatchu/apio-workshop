@@ -14,37 +14,26 @@
 
 package com.liferay.recipes.rest.internal;
 
+import com.liferay.apio.architect.annotation.Actions.Retrieve;
+import com.liferay.apio.architect.annotation.Id;
+import com.liferay.apio.architect.router.ActionRouter;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserService;
 import com.liferay.recipes.rest.model.UserDTO;
+import com.liferay.recipes.rest.type.PersonType;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 
 /**
  * @author Víctor Galán
  */
-@Component(
-	property = {
-		"osgi.jaxrs.application.select=(osgi.jaxrs.name=recipes-application)",
-		"osgi.jaxrs.resource=true"
-	},
-	service = Object.class,
-	immediate = true
-)
-@Path("user")
-public class UserResource {
+@Component
+public class PersonActionRouter implements ActionRouter<PersonType> {
 
-	@GET
-	@Path("{id}")
-	public UserDTO retrieve(@PathParam("id") long id) throws PortalException {
+	@Retrieve
+	public PersonType retrieve(@Id long id) throws PortalException {
 		return new UserDTO(_userService.getUserById(id));
 	}
-
 
 	@Reference
 	private UserService _userService;
