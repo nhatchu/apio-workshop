@@ -15,26 +15,20 @@
 package com.liferay.recipes.rest.model;
 
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.recipes.rest.type.PostalAddressType;
+import com.liferay.recipes.rest.type.RestaurantType;
 import com.liferay.recipes.rest.util.Utils;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Víctor Galán
  */
-
-@XmlRootElement
-public class OrganizationDTO {
+public class OrganizationDTO implements RestaurantType {
 
 	private long id;
 	private String name;
 	private String logoURL;
 	private AddressDTO address;
 	private Long chefId;
-
-	public OrganizationDTO() {
-	}
 
 	public OrganizationDTO(Organization organization) {
 		id = organization.getGroupId();
@@ -44,28 +38,28 @@ public class OrganizationDTO {
 		chefId = Utils.getChefId(organization);
 	}
 
-	@XmlElement
+	@Override
 	public Long getChefId() {
 		return chefId;
 	}
 
-	@XmlElement
+	@Override
 	public long getId() {
 		return id;
 	}
 
-	@XmlElement
+	@Override
 	public String getName() {
 		return name;
 	}
 
-	@XmlElement
+	@Override
 	public String getLogoURL() {
 		return logoURL;
 	}
 
-	@XmlElement
-	public AddressDTO getAddress() {
+	@Override
+	public PostalAddressType getAddress() {
 		return address;
 	}
 }
