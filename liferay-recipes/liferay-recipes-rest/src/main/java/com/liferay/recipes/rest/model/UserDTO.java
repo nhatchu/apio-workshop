@@ -15,18 +15,13 @@
 package com.liferay.recipes.rest.model;
 
 import com.liferay.portal.kernel.model.User;
+import com.liferay.recipes.rest.type.PersonType;
 import com.liferay.recipes.rest.util.Utils;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Víctor Galán
  */
-@XmlRootElement
-public class UserDTO {
+public class UserDTO implements PersonType {
 
 	private long id;
 	private String screenName;
@@ -36,8 +31,6 @@ public class UserDTO {
 	private String jobTitle;
 	private String fullName;
 	private String portraitURL;
-
-	public UserDTO() {}
 
 	public UserDTO(User user) {
 		id = user.getUserId();
@@ -50,42 +43,42 @@ public class UserDTO {
 		portraitURL = Utils.getPortraitURL(user);
 	}
 
-	@XmlElement
+	@Override
 	public String getPortraitURL() {
 		return portraitURL;
 	}
 
-	@XmlElement
+	@Override
 	public long getId() {
 		return id;
 	}
 
-	@XmlElement
+	@Override
 	public String getScreenName() {
 		return screenName;
 	}
 
-	@XmlElement
+	@Override
 	public String getEmail() {
 		return email;
 	}
 
-	@XmlElement
+	@Override
 	public String getFirstName() {
 		return firstName;
 	}
 
-	@XmlElement
+	@Override
 	public String getLastName() {
 		return lastName;
 	}
 
-	@XmlElement
+	@Override
 	public String getJobTitle() {
 		return jobTitle;
 	}
 
-	@XmlElement
+	@Override
 	public String getFullName() {
 		return fullName;
 	}

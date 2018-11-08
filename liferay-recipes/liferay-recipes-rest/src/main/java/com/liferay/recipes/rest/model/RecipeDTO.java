@@ -15,21 +15,16 @@
 package com.liferay.recipes.rest.model;
 
 import com.liferay.recipes.model.Recipe;
+import com.liferay.recipes.rest.type.RecipeType;
 import com.liferay.recipes.rest.util.Utils;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.List;
 
 /**
  * @author Víctor Galán
  */
-
-@XmlRootElement
-public class RecipeDTO {
+public class RecipeDTO implements RecipeType {
 
 	private Date createDate;
 	private Date modifiedDate;
@@ -44,10 +39,6 @@ public class RecipeDTO {
 	private String category;
 	private List<String> recipeAssetTags;
 	private String imageURL;
-
-	public RecipeDTO() {
-
-	}
 
 	public RecipeDTO(Recipe recipe) {
 		id = recipe.getRecipeId();
@@ -65,67 +56,67 @@ public class RecipeDTO {
 		imageURL = Utils.getImageURL(recipe);
 	}
 
-	@XmlElement
+	@Override
 	public Date getCreateDate() {
 		return createDate;
 	}
 
-	@XmlElement
+	@Override
 	public Date getModifiedDate() {
 		return modifiedDate;
 	}
 
-	@XmlElement
+	@Override
 	public Date getPublishedDate() {
 		return publishedDate;
 	}
 
-	@XmlElement
+	@Override
 	public String getRegion() {
 		return region;
 	}
 
-	@XmlElement
+	@Override
 	public List<String> getIngredients() {
 		return ingredients;
 	}
 
-	@XmlElement
+	@Override
 	public List<String> getSteps() {
 		return steps;
 	}
 
-	@XmlElement
+	@Override
 	public long getUserId() {
 		return userId;
 	}
 
-	@XmlElement
+	@Override
 	public long getId() {
 		return id;
 	}
 
-	@XmlElement
+	@Override
 	public String getVideoURL() {
 		return videoURL;
 	}
 
-	@XmlElement
+	@Override
 	public String getCookTime() {
 		return cookTime;
 	}
 
-	@XmlElement
+	@Override
 	public String getCategory() {
 		return category;
 	}
 
-	@XmlElement
+	@Override
 	public List<String> getRecipeAssetTags() {
 		return recipeAssetTags;
 	}
 
-	@XmlElement
+	@Override
 	public String getImageURL() {
 		return imageURL;
 	}

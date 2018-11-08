@@ -15,24 +15,17 @@
 package com.liferay.recipes.rest.model;
 
 import com.liferay.portal.kernel.model.Address;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.liferay.recipes.rest.type.PostalAddressType;
 
 /**
  * @author Víctor Galán
  */
-@XmlRootElement
-public class AddressDTO {
+public class AddressDTO implements PostalAddressType {
 
 	private String street;
 	private String zipCode;
 	private String regionName;
 	private String countryName;
-
-	public AddressDTO() {
-
-	}
 
 	public AddressDTO(Address address) {
 		countryName = address.getCountry().getName();
@@ -41,22 +34,22 @@ public class AddressDTO {
 		street = address.getStreet1();
 	}
 
-	@XmlElement
+	@Override
 	public String getStreet() {
 		return street;
 	}
 
-	@XmlElement
+	@Override
 	public String getZipCode() {
 		return zipCode;
 	}
 
-	@XmlElement
+	@Override
 	public String getRegionName() {
 		return regionName;
 	}
 
-	@XmlElement
+	@Override
 	public String getCountryName() {
 		return countryName;
 	}
